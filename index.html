@@ -3,75 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kingdom Panel</title>
-    
+
+<title>Kingdom</title>
+
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Kingdom">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <style>
 body {
     margin: 0;
-    height: 100vh;
+    font-family: sans-serif;
+    background: radial-gradient(circle, #000, #111);
+    color: gold;
+}
+
+/* loading */
+#loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #ffffff, #d4af37);
-    font-family: sans-serif;
+    font-size: 35px;
+    animation: fade 1.5s;
+    z-index: 999;
 }
 
-/* กล่องหลัก */
+/* panel */
 .panel {
-    width: 90%;
-    max-width: 350px;
+    display: none;
     padding: 20px;
-    border-radius: 20px;
-    background: rgba(0,0,0,0.8);
-    color: gold;
     text-align: center;
 }
 
 /* input */
 input {
     width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 10px;
+    padding: 12px;
+    margin: 8px;
+    border-radius: 12px;
     border: none;
 }
 
-/* ปุ่ม */
+/* button */
 button {
     width: 95%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
     background: gold;
-    color: black;
+    border: none;
     font-weight: bold;
 }
 
-/* เมนู */
-.menu {
-    margin-top: 15px;
-    display: none;
-}
-
+/* toggle */
 .toggle {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0;
-    background: #222;
-    padding: 10px;
-    border-radius: 10px;
+    background: #111;
+    padding: 14px;
+    margin: 12px 0;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.toggle.active {
+    box-shadow: 0 0 15px gold;
+}
+
+/* animation */
+@keyframes fade {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 </style>
 
 </head>
+
 <body>
 
-<div class="panel">
-    <h2>👑 Kingdom Panel</h2>
+<div id="loading">👑 Kingdom</div>
+
+<div class="panel" id="app">
+
+    <h2>Kingdom Panel</h2>
 
     <div id="login">
         <input type="text" id="user" placeholder="Username">
@@ -79,28 +97,37 @@ button {
         <button onclick="login()">เข้าสู่ระบบ</button>
     </div>
 
-    <div class="menu" id="menu">
+    <div id="menu" style="display:none;">
         <h3>เมนู</h3>
 
         <div class="toggle">
-            <span>ดูดหัว 100%</span>
-            <input type="checkbox">
+            ดูดหัว 100%
+            <input type="checkbox" onchange="toggle(this)">
         </div>
 
         <div class="toggle">
-            <span>ดูดหัว 85%</span>
-            <input type="checkbox">
+            ดูดหัว 85%
+            <input type="checkbox" onchange="toggle(this)">
         </div>
 
         <div class="toggle">
-            <span>กันแบน 100%</span>
-            <input type="checkbox">
+            กันแบน 100%
+            <input type="checkbox" onchange="toggle(this)">
         </div>
 
     </div>
+
 </div>
 
 <script>
+
+// loading
+setTimeout(() => {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("app").style.display = "block";
+}, 1800);
+
+// login
 function login() {
     let u = document.getElementById("user").value;
     let p = document.getElementById("pass").value;
@@ -108,10 +135,53 @@ function login() {
     if (u === "Kingdom" && p === "2001") {
         document.getElementById("login").style.display = "none";
         document.getElementById("menu").style.display = "block";
+        vibrate();
     } else {
         alert("รหัสผิด!");
     }
 }
+
+// toggle effect
+function toggle(el) {
+    let parent = el.parentElement;
+
+    if (el.checked) {
+        parent.classList.add("active");
+        save();
+        vibrate();
+    } else {
+        parent.classList.remove("active");
+        save();
+    }
+}
+
+// vibration
+function vibrate() {
+    if (navigator.vibrate) {
+        navigator.vibrate(100);
+    }
+}
+
+// save state
+function save() {
+    let checks = document.querySelectorAll("input[type=checkbox]");
+    let data = [];
+    checks.forEach(c => data.push(c.checked));
+    localStorage.setItem("state", JSON.stringify(data));
+}
+
+// load state
+window.onload = function() {
+    let data = JSON.parse(localStorage.getItem("state"));
+    if (data) {
+        let checks = document.querySelectorAll("input[type=checkbox]");
+        checks.forEach((c,i) => {
+            c.checked = data[i];
+            if(c.checked) c.parentElement.classList.add("active");
+        });
+    }
+}
+
 </script>
 
 </body>
