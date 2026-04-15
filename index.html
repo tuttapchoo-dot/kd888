@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kingdom Panel</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff, #d4af37);
+    font-family: sans-serif;
+}
+
+/* กล่องหลัก */
+.panel {
+    width: 90%;
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.8);
+    color: gold;
+    text-align: center;
+}
+
+/* input */
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: none;
+}
+
+/* ปุ่ม */
+button {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    background: gold;
+    color: black;
+    font-weight: bold;
+}
+
+/* เมนู */
+.menu {
+    margin-top: 15px;
+    display: none;
+}
+
+.toggle {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    background: #222;
+    padding: 10px;
+    border-radius: 10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="panel">
+    <h2>👑 Kingdom Panel</h2>
+
+    <div id="login">
+        <input type="text" id="user" placeholder="Username">
+        <input type="password" id="pass" placeholder="Password">
+        <button onclick="login()">เข้าสู่ระบบ</button>
+    </div>
+
+    <div class="menu" id="menu">
+        <h3>เมนู</h3>
+
+        <div class="toggle">
+            <span>ดูดหัว 100%</span>
+            <input type="checkbox">
+        </div>
+
+        <div class="toggle">
+            <span>ดูดหัว 85%</span>
+            <input type="checkbox">
+        </div>
+
+        <div class="toggle">
+            <span>กันแบน 100%</span>
+            <input type="checkbox">
+        </div>
+
+    </div>
+</div>
+
+<script>
+function login() {
+    let u = document.getElementById("user").value;
+    let p = document.getElementById("pass").value;
+
+    if (u === "Kingdom" && p === "2001") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("menu").style.display = "block";
+    } else {
+        alert("รหัสผิด!");
+    }
+}
+</script>
+
+</body>
+</html>
